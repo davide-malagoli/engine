@@ -1,5 +1,3 @@
-require 'date'
-
 module Liquid
   module Locomotive
     module Tags
@@ -20,14 +18,7 @@ module Liquid
 
         def render(context)
           %{
-          	{"expiration": DateTime.now.strftime('%Y-%m-%dT%H:%M:%SZ'),
-  	   	 "conditions": [ 
-    				{"bucket": #{$ENV["S3_BUCKET"]}}, 
-    				["starts-with", "$key", 'uploads/#{@user}/'],
-    				{"acl": "private"},
-    				{"success_action_redirect": '#{@redirect}'}
-  		 ]
-		}
+          	<div></div>
 	   }
         end
       end
