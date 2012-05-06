@@ -21,7 +21,7 @@ module Liquid
         #end
 
         def render(context)
-	  date=(Time.now+180).utc.strftime("%y-%m-%dT%H:%M:%SZ")
+	  date=(Time.now+180).utc.strftime("%Y-%m-%dT%H:%M:%SZ")
 	  bucket=ENV["UPLOADS_BUCKET"]
 	  redirect=ENV["REDIRECT_URL"]	
 	  user=context.registers[:current_locomotive_account].email
