@@ -1,4 +1,6 @@
 require 'base64'
+require 'openssl'
+require 'digest/sha1'
 #require 'liquid'
 
 module Liquid
@@ -19,7 +21,7 @@ module Liquid
         #end
 
         def render(context)
-	  date=Time.now.utc.strftime("%y-%m-%dT%H:%M:%SZ")
+	  date=(Time.now+180).utc.strftime("%y-%m-%dT%H:%M:%SZ")
 	  bucket=ENV["UPLOADS_BUCKET"]
 	  redirect=ENV["REDIRECT_URL"]	
 	  user=context.registers[:current_locomotive_account].email
@@ -35,7 +37,18 @@ module Liquid
   					]
 			}
 		"""
-	  #Base64.encode64(policy_document).gsub("\n","")
+	  policy=Base64.encode64(policy_document).gsub("\n","")
+	  signature = Base64.encode64(
+    			OpenSSL::HMAC.digest(
+        					OpenSSL::Digest::Digest.new('sha1'), 
+        					ENV["S3_SECRET_KEY"], 
+						policy
+			)
+    		      ).gsub("\n","")
+
+	%{<input type='hidden' name='policy' value='#{policy}'>
+      <input type='hidden' name='signature' value='#{signature}'>
+	<div>#{policy_document}</div>}
         end
       end
 
