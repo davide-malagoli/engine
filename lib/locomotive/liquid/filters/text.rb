@@ -1,7 +1,13 @@
+require 'digest/sha1'
+
 module Locomotive
   module Liquid
     module Filters
       module Text
+
+	def hash(input)
+	  Digest::SHA1.hexdigest(input.to_s)
+	end
 
         def underscore(input)
           input.to_s.gsub(' ', '_').gsub('/', '_').underscore
